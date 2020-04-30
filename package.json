@@ -1,0 +1,25 @@
+{
+  "name": "vuex-ts-enhance",
+  "version": "0.0.1",
+  "description": "vuex types enhance",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zWingz/vuex-ts-enhance"
+  },
+  "devDependencies": {
+    "poi": "^12.7.5",
+    "typescript": "^3.8.3",
+    "vue": "^2.6.11",
+    "vue-template-compiler": "^2.6.11",
+    "vuex": "^3.3.0"
+  },
+  "scripts": {
+    "dev": "poi --serve",
+    "build": "tsc -p .",
+    "prepublishOnly": "yarn build"
+  },
+  "author": "zhengzwing@gmail.com",
+  "license": "MIT"
+}
