@@ -52,8 +52,16 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
   }
 
   /**
-   * mapAction
+   * mapGetters
    */
+  // mapper
+  mapGetters<Map extends Record<string, K>, K extends OnlyString<Getters<T>>>(
+    k: Map
+  ): { [k in keyof Map]: () => ReturnType<Getters<T>[Map[k]]> };
+  // keys
+  mapGetters<Keys extends OnlyString<Getters<T>>>(
+    k: Keys[]
+  ): { [k in Keys]: () => ReturnType<Getters<T>[k]> };
   // namespace keys
   mapGetters<
     NameSpace extends OnlyString<Module<T>>,
@@ -77,14 +85,6 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
       SelectObject<T, NameSpace, 'getters'>[Map[k]]
     >;
   };
-  // mapper
-  mapGetters<Map extends Record<string, K>, K extends OnlyString<Getters<T>>>(
-    k: Map
-  ): { [k in keyof Map]: () => ReturnType<Getters<T>[Map[k]]> };
-  // keys
-  mapGetters<Keys extends OnlyString<Getters<T>>>(
-    k: Keys[]
-  ): { [k in Keys]: () => ReturnType<Getters<T>[k]> };
   mapGetters(k: any, u?: any) {
     if (u) {
       return mapGetters(k, u);
