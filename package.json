@@ -1,10 +1,14 @@
 {
   "name": "vuex-ts-enhance",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "vuex types enhance",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "keywords": ["vuex", "typescript", "vue"],
+  "keywords": [
+    "vuex",
+    "typescript",
+    "vue"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/zWingz/vuex-ts-enhance"
