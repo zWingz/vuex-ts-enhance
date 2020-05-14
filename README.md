@@ -1,6 +1,6 @@
 # vuex-ts-enhance
 
-enhance types from vuex
+enhance types from vuex 
 
 it will check `mapXXXX()` params for `state`, `getters`, `actions` in store
 
@@ -8,22 +8,34 @@ it will check `mapXXXX()` params for `state`, `getters`, `actions` in store
 
 [state](./dev/store.ts)
 
+**check for typescript**
 ![](example/2020-04-30-18-48-36.png)
-![](example/2020-04-30-18-49-06.png)
-![](example/2020-04-30-18-49-23.png)
 
+**check for return type**
+![](example/2020-04-30-18-49-06.png)
+
+**tips from vscode**
+![](example/2020-04-30-18-49-23.png)
+![](example/2020-05-14-19-29-15.png)
+![](example/2020-05-14-19-29-28.png)
+![](example/2020-05-14-19-34-36.png)
 ## Usage
+
+use `EnhanceStore` to create `store`
 
 ```ts
 import { EnhanceStore } from 'vuex-ts-enhance'
 import Vuex from 'vuex';
 import Vue from 'vue';
 Vue.use(Vuex);
+
+// state cannot be declared
 const state = {
   // your state
 }
 const s = new EnhanceStore(state);
 export const { mapGetters, store, mapActions } = s;
+
 ```
 
 ```html
@@ -59,6 +71,30 @@ export default {
   }
 }
 </script>
+```
+
+**Note**
+if write in js and your `getter` or `actions` is empty, you must to declare it
+
+```js
+// store.js
+/**
+ * @constant
+ * @type {import('vuex').GetterTree}
+ */
+const getters = {};
+/**
+ * @constant
+ * @type {import('vuex').ActionTree}
+ */
+const actions = {
+};
+/**
+ * @constant
+ * @type {import('vuex').MutationTree}
+ */
+const mutations = {
+};
 ```
 
 ## develop

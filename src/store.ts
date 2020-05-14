@@ -21,14 +21,16 @@ type State<T extends StoreOptions<any>> = T['state'];
 
 type OnlyString<T> = keyof T & string;
 
-type SelectKey<T extends StoreOptions<any>, E, K> = E extends OnlyString<
+type GetKeys<T extends StoreOptions<any>, E, K> = E extends OnlyString<
   Module<T>
 >
   ? K extends OnlyString<Module<T>[E]>
     ? OnlyString<Module<T>[E][K]>
     : never
   : never;
-type SelectObject<T extends StoreOptions<any>, E, K> = E extends OnlyString<
+
+
+type GetObject<T extends StoreOptions<any>, E, K> = E extends OnlyString<
   Module<T>
 >
   ? K extends OnlyString<Module<T>[E]>
@@ -36,6 +38,12 @@ type SelectObject<T extends StoreOptions<any>, E, K> = E extends OnlyString<
     : never
   : never;
 
+
+/**
+ * methods override ordering must be
+ * mapper > keys
+ * root > namespaces
+ */
 export class EnhanceStore<S, T extends StoreOptions<S>> {
   store: _Store<S>;
   constructor(s: T) {
@@ -43,7 +51,7 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
   }
   dispatch<
     E extends OnlyString<Module<T>>,
-    U extends SelectKey<T, E, 'actions'>
+    U extends GetKeys<T, E, 'actions'>
   >(k: E, u: U, payload?: any) {
     if (Array.isArray(u)) {
       return this.store.dispatch(`${k}/${u}`, payload);
@@ -62,72 +70,66 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
   mapGetters<Keys extends OnlyString<Getters<T>>>(
     k: Keys[]
   ): { [k in Keys]: () => ReturnType<Getters<T>[k]> };
-  // namespace keys
-  mapGetters<
-    NameSpace extends OnlyString<Module<T>>,
-    Keys extends SelectKey<T, NameSpace, 'getters'>
-  >(
-    k: NameSpace,
-    u: Keys[]
-  ): {
-    [K in Keys]: () => ReturnType<SelectObject<T, NameSpace, 'getters'>[K]>;
-  };
   // namespace mapper
   mapGetters<
     NameSpace extends OnlyString<Module<T>>,
     Map extends Record<string, Keys>,
-    Keys extends SelectKey<T, NameSpace, 'getters'>
+    Keys extends GetKeys<T, NameSpace, 'getters'>
   >(
     k: NameSpace,
     m: Map
   ): {
     [k in keyof Map]: () => ReturnType<
-      SelectObject<T, NameSpace, 'getters'>[Map[k]]
+      GetObject<T, NameSpace, 'getters'>[Map[k]]
     >;
   };
+  // namespace keys
+  mapGetters<
+    NameSpace extends OnlyString<Module<T>>,
+    Keys extends GetKeys<T, NameSpace, 'getters'>
+  >(
+    k: NameSpace,
+    u: Keys[]
+  ): {
+    [K in Keys]: () => ReturnType<GetObject<T, NameSpace, 'getters'>[K]>;
+  };
   mapGetters(k: any, u?: any) {
-    if (u) {
-      return mapGetters(k, u);
-    }
-    return mapGetters(k);
+    return mapGetters(k, u);
   }
   /**
    * mapActions
    */
-  // keys
-  mapActions<Keys extends OnlyString<Actions<T>>>(
-    k: Keys[]
-  ): { [k in Keys]: PromiseAction<Actions<T>[k]> };
   // mapper
   mapActions<Map extends Record<string, K>, K extends OnlyString<Actions<T>>>(
     k: Map
   ): { [k in keyof Map]: PromiseAction<Actions<T>[Map[k]]> };
-  // namespace keys
-  mapActions<
-    NameSpace extends OnlyString<Module<T>>,
-    Keys extends SelectKey<T, NameSpace, 'actions'>
-  >(
-    k: NameSpace,
-    u: Keys[]
-  ): { [K in Keys]: PromiseAction<SelectObject<T, NameSpace, 'actions'>[K]> };
+  // keys
+  mapActions<Keys extends OnlyString<Actions<T>>>(
+    k: Keys[]
+  ): { [k in Keys]: PromiseAction<Actions<T>[k]> };
   // namespace mapper
   mapActions<
     NameSpace extends OnlyString<Module<T>>,
     Map extends Record<string, Keys>,
-    Keys extends SelectKey<T, NameSpace, 'actions'>
+    Keys extends GetKeys<T, NameSpace, 'actions'>
   >(
     k: NameSpace,
     m: Map
   ): {
     [k in keyof Map]: PromiseAction<
-      SelectObject<T, NameSpace, 'actions'>[Map[k]]
+      GetObject<T, NameSpace, 'actions'>[Map[k]]
     >;
   };
+  // namespace keys
+  mapActions<
+    NameSpace extends OnlyString<Module<T>>,
+    Keys extends GetKeys<T, NameSpace, 'actions'>
+  >(
+    k: NameSpace,
+    u: Keys[]
+  ): { [K in Keys]: PromiseAction<GetObject<T, NameSpace, 'actions'>[K]> };
   mapActions(k: any, u?: any) {
-    if (u) {
-      return mapActions(k, u);
-    }
-    return mapActions(k);
+    return mapActions(k, u);
   }
   /**
    * mapState
@@ -140,27 +142,24 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
   mapState<Keys extends OnlyString<State<T>>>(
     k: Keys[]
   ): { [k in Keys]: State<T>[k] };
-  // namespace keys
-  mapState<
-    NameSpace extends OnlyString<Module<T>>,
-    Keys extends SelectKey<T, NameSpace, 'state'>
-  >(
-    k: NameSpace,
-    u: Keys[]
-  ): { [K in Keys]: SelectObject<T, NameSpace, 'state'>[K] };
   // nanespace mapper
   mapState<
     NameSpace extends OnlyString<Module<T>>,
     Map extends Record<string, Keys>,
-    Keys extends SelectKey<T, NameSpace, 'state'>
+    Keys extends GetKeys<T, NameSpace, 'state'>
   >(
     k: NameSpace,
     m: Map
-  ): { [k in keyof Map]: SelectObject<T, NameSpace, 'state'>[Map[k]] };
+  ): { [k in keyof Map]: GetObject<T, NameSpace, 'state'>[Map[k]] };
+  // namespace keys
+  mapState<
+    NameSpace extends OnlyString<Module<T>>,
+    Keys extends GetKeys<T, NameSpace, 'state'>
+  >(
+    k: NameSpace,
+    u: Keys[]
+  ): { [K in Keys]: GetObject<T, NameSpace, 'state'>[K] };
   mapState(k: any, u?: any) {
-    if (u) {
-      return mapState(k, u);
-    }
-    return mapState(k);
+    return mapState(k, u);
   }
 }
