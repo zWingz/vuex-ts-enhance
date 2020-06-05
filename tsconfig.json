@@ -9,10 +9,11 @@
     "declarationDir": "lib",
     "strict": true,
     "moduleResolution": "node",
+    "noImplicitAny": false,
     // "declaration": true,
     // "importHelpers": true,
     "experimentalDecorators": true
   },
-  "include": ["src"],
+  "include": ["src", "dev"],
   "exclude": ["node_modules"]
 }
