@@ -12,7 +12,7 @@
 
 ### Bugfix
 
-- `mapStats` return a function (#3)
+- `mapState` return a function (#3)
 
 ## Release 0.0.4
 
