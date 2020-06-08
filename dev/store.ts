@@ -46,6 +46,10 @@ const state = {
         updateUserMeta({ commit }, payload: { age?: number; address?: string }) {
           commit('setUsername', payload);
         },
+        test: {
+          root: true,
+          handler({ commit }) {}
+        }
       },
       mutations: {
         setUsername(state, payload) {
@@ -72,3 +76,5 @@ const state = {
 
 const s = new EnhanceStore(state);
 export const { mapGetters, store, mapActions, mapMutations, mapState } = s;
+
+mapActions('user', ['updateUserMeta']).updateUserMeta

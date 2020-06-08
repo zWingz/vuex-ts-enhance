@@ -1,21 +1,23 @@
-import {
-  StoreOptions,
-  ActionHandler,
-  ActionObject,
-} from 'vuex';
+import { StoreOptions, ActionHandler, ActionObject } from 'vuex';
+
+
+type Payload<T> = T extends (arg1: any, arg2: any) => any ? Parameters<T>[1] : never
+
 
 export type PromiseAction<T> = T extends ActionHandler<any, any>
-  ? Parameters<T>[1] extends undefined
-    ? T extends ActionObject<any, any>
-      ? (...args: any) => Promise<ReturnType<T['handler']>>
-      : () => Promise<ReturnType<T>>
-    : (data: Parameters<T>[1]) => Promise<ReturnType<T>>
+  ? Payload<T> extends undefined
+    ? () => Promise<ReturnType<T>>
+    : (payload: Payload<T>) => Promise<ReturnType<T>>
+  : T extends ActionObject<any, any>
+  ? Payload<T['handler']> extends undefined 
+  ? () => Promise<ReturnType<T['handler']>>
+  : (payload: Payload<T['handler']>) => Promise<ReturnType<T['handler']>>
   : never;
 
 export type Mutation<T> = T extends (...args: any[]) => void
-  ? Parameters<T>[1] extends undefined
+  ? Payload<T> extends undefined
     ? () => void
-    : (data: Parameters<T>[1]) => void
+    : (payload: Payload<T>) => void
   : never;
 
 export type Module<T extends StoreOptions<any>> = T['modules'];
@@ -33,7 +35,6 @@ export type GetKeys<T extends StoreOptions<any>, E, K> = E extends OnlyString<
     ? OnlyString<Module<T>[E][K]>
     : never
   : never;
-
 
 export type GetObject<T extends StoreOptions<any>, E, K> = E extends OnlyString<
   Module<T>

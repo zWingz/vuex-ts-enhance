@@ -16,13 +16,14 @@ export default Vue.extend({
     ...mapGetters(['getName']),
     ...mapGetters('user', {
       getUsername1: 'getUsername'
-    })
+    }),
   },
   mounted() {
     console.log(this.getName);
     console.log(this.getUsername);
     console.log(this.getUsername1);
     this.updateUsername('updateUsername')
+    this.username
     this.updateUserMeta({ age: 21 });
     // this.()
   },
