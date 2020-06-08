@@ -34,18 +34,32 @@ const state = {
       namespaced: true,
       state: {
         username: 'this is username',
+        meta: {
+          age: 20,
+          address: 'address'
+        }
       },
       actions: {
-        setUsername({ commit }, payload) {
+        updateUsername({ commit }, payload: string) {
           commit('setUsername', payload);
         },
-        setUsername2({ commit }, payload) {
+        updateUserMeta({ commit }, payload: { age?: number; address?: string }) {
           commit('setUsername', payload);
         },
+        test: {
+          root: true,
+          handler({ commit }) {}
+        }
       },
       mutations: {
         setUsername(state, payload) {
           state.username = payload
+        },
+        setUserMeta(state, payload: { age?: number; address?: string }) {
+          state.meta = {
+            ...state.meta,
+            ...payload
+          };
         }
       },
       getters: {
@@ -61,4 +75,6 @@ const state = {
 };
 
 const s = new EnhanceStore(state);
-export const { mapGetters, store, mapActions } = s;
+export const { mapGetters, store, mapActions, mapMutations, mapState } = s;
+
+mapActions('user', ['updateUserMeta']).updateUserMeta
