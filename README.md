@@ -19,6 +19,7 @@ it will check `mapXXXX()` params for `state`, `getters`, `actions` in store
 ![](example/2020-05-14-19-29-15.png)
 ![](example/2020-05-14-19-29-28.png)
 ![](example/2020-05-14-19-34-36.png)
+
 ## Usage
 
 use `EnhanceStore` to create `store`
@@ -95,6 +96,28 @@ const actions = {
  */
 const mutations = {
 };
+```
+
+## Notice
+
+- You can't defined `state` as `StoreOptions`
+
+```typescript
+const state: StoreOptions<any> = {} // don't do that
+```
+
+- You must be defined `context` as `any` if use `jsdoc` for types
+
+```javascript
+const state = {
+  actions: {
+    /**
+     * @param {any} context
+     * @param {string} payload
+     */
+    someActions(context, payload) {}
+  }
+}
 ```
 
 ## develop

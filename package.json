@@ -4,6 +4,7 @@
   "description": "vuex types enhance",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": ["lib"],
   "keywords": [
     "vuex",
     "typescript",
