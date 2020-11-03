@@ -14,21 +14,27 @@ dispatch('rootAction')('payload');
 dispatch('namespace', 'action')('payload');
 ```
 
+![](example/2020-11-03-20-07-39.png)
+![](example/2020-11-03-20-07-57.png)
+
 ## Example
 
 [state](./dev/store.ts)
 
 **check for typescript**
+
 ![](example/2020-04-30-18-48-36.png)
 
 **check for return type**
+
 ![](example/2020-04-30-18-49-06.png)
 
 **tips from vscode**
+
 ![](example/2020-04-30-18-49-23.png)
-![](example/2020-05-14-19-29-15.png)
 ![](example/2020-05-14-19-29-28.png)
 ![](example/2020-05-14-19-34-36.png)
+![](example/2020-05-14-19-29-15.png)
 
 ## Usage
 

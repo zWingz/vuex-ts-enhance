@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapGetters, mapActions, mapState, mapMutations } from './store'
+import { mapGetters, mapActions, mapState, mapMutations, dispatch } from './store'
 export default Vue.extend({
   computed: {
     ...mapState('user', ['username']),
@@ -25,6 +25,7 @@ export default Vue.extend({
     this.updateUsername('updateUsername')
     this.username
     this.updateUserMeta({ age: 21 });
+    dispatch('user', 'updateUsername')()
     // this.()
   },
   methods: {

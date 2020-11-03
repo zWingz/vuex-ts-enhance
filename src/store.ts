@@ -31,6 +31,10 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
   constructor(s: T) {
     this.store = new _Store(s);
   }
+  // key
+  dispatch<Key extends OnlyString<Actions<T>>>(
+    action: Key
+  ): PromiseAction<Actions<T>[Key]>;
   // namespace
   dispatch<
     NameSpace extends OnlyString<Module<T>>,
@@ -39,10 +43,6 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     namespace: NameSpace,
     key: Key
   ): PromiseAction<GetNameSpaceObject<T, NameSpace, 'actions'>[Key]>;
-  // key
-  dispatch<Key extends OnlyString<Actions<T>>>(
-    action: Key
-  ): PromiseAction<Actions<T>[Key]>;
   dispatch(arg1, arg2?) {
     return (...payload: any) => {
       const { dispatch } = this.store;
