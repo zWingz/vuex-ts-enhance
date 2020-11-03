@@ -16,8 +16,8 @@ import {
   State,
   Mutations,
   OnlyString,
-  GetKeys,
-  GetObject,
+  GetNameSpaceKeys,
+  GetNameSpaceObject,
 } from './types';
 
 /**
@@ -31,15 +31,26 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
   constructor(s: T) {
     this.store = new _Store(s);
   }
-
+  // namespace
   dispatch<
-    E extends OnlyString<Module<T>>,
-    U extends GetKeys<T, E, 'actions'>
-  >(k: E, u: U, payload?: any) {
-    if (Array.isArray(u)) {
-      return this.store.dispatch(`${k}/${u}`, payload);
-    }
-    return this.store.dispatch(k, payload);
+    NameSpace extends OnlyString<Module<T>>,
+    Key extends GetNameSpaceKeys<T, NameSpace, 'actions'>
+  >(
+    namespace: NameSpace,
+    key: Key
+  ): PromiseAction<GetNameSpaceObject<T, NameSpace, 'actions'>[Key]>;
+  // key
+  dispatch<Key extends OnlyString<Actions<T>>>(
+    action: Key
+  ): PromiseAction<Actions<T>[Key]>;
+  dispatch(arg1, arg2?) {
+    return (...payload: any) => {
+      const { dispatch } = this.store;
+      if (arg2) {
+        return dispatch(`${arg1}/${arg2}`, ...payload);
+      }
+      return dispatch(arg1, ...payload);
+    };
   }
 
   /**
@@ -59,25 +70,27 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
   mapGetters<
     NameSpace extends OnlyString<Module<T>>,
     Map extends Record<string, Keys>,
-    Keys extends GetKeys<T, NameSpace, 'getters'>
+    Keys extends GetNameSpaceKeys<T, NameSpace, 'getters'>
   >(
     k: NameSpace,
     m: Map
   ): {
     [k in keyof Map]: () => ReturnType<
-      GetObject<T, NameSpace, 'getters'>[Map[k]]
+      GetNameSpaceObject<T, NameSpace, 'getters'>[Map[k]]
     >;
   };
 
   // namespace keys
   mapGetters<
     NameSpace extends OnlyString<Module<T>>,
-    Keys extends GetKeys<T, NameSpace, 'getters'>
+    Keys extends GetNameSpaceKeys<T, NameSpace, 'getters'>
   >(
     k: NameSpace,
     u: Keys[]
   ): {
-    [K in Keys]: () => ReturnType<GetObject<T, NameSpace, 'getters'>[K]>;
+    [K in Keys]: () => ReturnType<
+      GetNameSpaceObject<T, NameSpace, 'getters'>[K]
+    >;
   };
 
   mapGetters(k: any, u?: any) {
@@ -101,24 +114,26 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
   mapActions<
     NameSpace extends OnlyString<Module<T>>,
     Map extends Record<string, Keys>,
-    Keys extends GetKeys<T, NameSpace, 'actions'>
+    Keys extends GetNameSpaceKeys<T, NameSpace, 'actions'>
   >(
     k: NameSpace,
     m: Map
   ): {
     [k in keyof Map]: PromiseAction<
-      GetObject<T, NameSpace, 'actions'>[Map[k]]
+      GetNameSpaceObject<T, NameSpace, 'actions'>[Map[k]]
     >;
   };
 
   // namespace keys
   mapActions<
     NameSpace extends OnlyString<Module<T>>,
-    Keys extends GetKeys<T, NameSpace, 'actions'>
+    Keys extends GetNameSpaceKeys<T, NameSpace, 'actions'>
   >(
     k: NameSpace,
     u: Keys[]
-  ): { [K in Keys]: PromiseAction<GetObject<T, NameSpace, 'actions'>[K]> };
+  ): {
+    [K in Keys]: PromiseAction<GetNameSpaceObject<T, NameSpace, 'actions'>[K]>;
+  };
 
   mapActions(k: any, u?: any) {
     return mapActions(k, u);
@@ -128,9 +143,10 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
    * mapMutations
    */
   // mapper
-  mapMutations<Map extends Record<string, K>, K extends OnlyString<Mutations<T>>>(
-    k: Map
-  ): { [k in keyof Map]: Mutation<Mutations<T>[Map[k]]> };
+  mapMutations<
+    Map extends Record<string, K>,
+    K extends OnlyString<Mutations<T>>
+  >(k: Map): { [k in keyof Map]: Mutation<Mutations<T>[Map[k]]> };
 
   // keys
   mapMutations<Keys extends OnlyString<Mutations<T>>>(
@@ -141,22 +157,26 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
   mapMutations<
     NameSpace extends OnlyString<Module<T>>,
     Map extends Record<string, Keys>,
-    Keys extends GetKeys<T, NameSpace, 'mutations'>
+    Keys extends GetNameSpaceKeys<T, NameSpace, 'mutations'>
   >(
     k: NameSpace,
     m: Map
   ): {
-    [k in keyof Map]: Mutation<GetObject<T, NameSpace, 'mutations'>[Map[k]]>;
+    [k in keyof Map]: Mutation<
+      GetNameSpaceObject<T, NameSpace, 'mutations'>[Map[k]]
+    >;
   };
 
   // namespace keys
   mapMutations<
     NameSpace extends OnlyString<Module<T>>,
-    Keys extends GetKeys<T, NameSpace, 'mutations'>
+    Keys extends GetNameSpaceKeys<T, NameSpace, 'mutations'>
   >(
     k: NameSpace,
     u: Keys[]
-  ): { [K in Keys]: Mutation<GetObject<T, NameSpace, 'mutations'>[K]>; }
+  ): {
+    [K in Keys]: Mutation<GetNameSpaceObject<T, NameSpace, 'mutations'>[K]>;
+  };
   mapMutations(k: any, u?: any) {
     return mapMutations(k, u);
   }
@@ -178,20 +198,22 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
   mapState<
     NameSpace extends OnlyString<Module<T>>,
     Map extends Record<string, Keys>,
-    Keys extends GetKeys<T, NameSpace, 'state'>
+    Keys extends GetNameSpaceKeys<T, NameSpace, 'state'>
   >(
     k: NameSpace,
     m: Map
-  ): { [k in keyof Map]: () => GetObject<T, NameSpace, 'state'>[Map[k]] };
+  ): {
+    [k in keyof Map]: () => GetNameSpaceObject<T, NameSpace, 'state'>[Map[k]];
+  };
 
   // namespace keys
   mapState<
     NameSpace extends OnlyString<Module<T>>,
-    Keys extends GetKeys<T, NameSpace, 'state'>
+    Keys extends GetNameSpaceKeys<T, NameSpace, 'state'>
   >(
     k: NameSpace,
     u: Keys[]
-  ): { [K in Keys]: () => GetObject<T, NameSpace, 'state'>[K] };
+  ): { [K in Keys]: () => GetNameSpaceObject<T, NameSpace, 'state'>[K] };
   mapState(k: any, u?: any) {
     return mapState(k, u);
   }

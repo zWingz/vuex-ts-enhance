@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## Release 0.0.6
+
+### Feature
+
+- support `dispatch`
+
+### Chore
+
+- optimize types
+
 ## Release 0.0.5
 
 ### Feature
@@ -16,4 +26,4 @@
 
 ## Release 0.0.4
 
-- support `mapState` `mapGetters` `mapActions` and `dispatch`
+- support `mapState` `mapGetters` `mapActions`

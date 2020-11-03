@@ -7,12 +7,12 @@ const state = {
     name: 'this is name',
   },
   actions: {
-    setName({ commit }, payload) {
+    setName({ commit }, payload?: string) {
       commit('setName', payload);
       return 1
     },
-    setName2({ commit }, payload) {
-      commit('setName', payload);
+    setName2({ commit }, test?: string) {
+      commit('setName');
       return 1
     },
   },
@@ -46,9 +46,12 @@ const state = {
         updateUserMeta({ commit }, payload: { age?: number; address?: string }) {
           commit('setUsername', payload);
         },
+        noParam({ commit }) {
+          commit('setUsername');
+        },
         test: {
           root: true,
-          handler({ commit }) {}
+          handler({ commit }, payload: number) { return 2}
         }
       },
       mutations: {
@@ -75,6 +78,16 @@ const state = {
 };
 
 const s = new EnhanceStore(state);
-export const { mapGetters, store, mapActions, mapMutations, mapState } = s;
+export const { mapGetters, store, mapActions, mapMutations, mapState, dispatch } = s;
 
-mapActions('user', ['updateUserMeta']).updateUserMeta
+mapActions('user', ['test']).test
+dispatch('setName2')
+var aa = dispatch('setName')('ds')
+
+dispatch('user','test')
+dispatch('user', 'updateUserMeta')({
+  address: '',
+  age: 1
+})
+dispatch('user', 'test')(1)
+dispatch('setName')('1')
