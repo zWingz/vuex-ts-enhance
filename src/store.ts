@@ -30,6 +30,7 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
 
   constructor(s: T) {
     this.store = new _Store(s);
+    this.dispatch = this.dispatch.bind(this)
   }
   // key
   dispatch<Key extends OnlyString<Actions<T>>>(

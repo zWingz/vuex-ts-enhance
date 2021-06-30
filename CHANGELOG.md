@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Release 0.0.7
+
+### Bug
+
+- fixed `this is undefined` in `dispatch`
+
 ## Release 0.0.6
 
 ### Feature
