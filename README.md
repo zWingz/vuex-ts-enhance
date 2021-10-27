@@ -24,7 +24,7 @@ dispatch('namespace', 'action')('payload');
 **check for typescript**
 
 ![](example/2020-04-30-18-48-36.png)
-
+123123213
 **check for return type**
 
 ![](example/2020-04-30-18-49-06.png)
