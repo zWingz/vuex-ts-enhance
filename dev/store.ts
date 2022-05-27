@@ -51,7 +51,7 @@ const state = {
         },
         test: {
           root: true,
-          handler({ commit }, payload: number) { return 2}
+          handler({ commit }, payload: number) { return 2; }
         }
       },
       mutations: {

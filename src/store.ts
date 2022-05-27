@@ -18,6 +18,7 @@ import {
   OnlyString,
   GetNameSpaceKeys,
   GetNameSpaceObject,
+  AsFunction
 } from './types';
 
 /**
@@ -60,12 +61,12 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
   // mapper
   mapGetters<Map extends Record<string, K>, K extends OnlyString<Getters<T>>>(
     k: Map
-  ): { [k in keyof Map]: () => ReturnType<Getters<T>[Map[k]]> };
+  ): { [k in keyof Map]: () => ReturnType<AsFunction<Getters<T>[Map[k]]>> };
 
   // keys
   mapGetters<Keys extends OnlyString<Getters<T>>>(
     k: Keys[]
-  ): { [k in Keys]: () => ReturnType<Getters<T>[k]> };
+  ): { [k in Keys]: () => ReturnType<AsFunction<Getters<T>[k]>> };
 
   // namespace mapper
   mapGetters<
@@ -77,7 +78,7 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     m: Map
   ): {
     [k in keyof Map]: () => ReturnType<
-      GetNameSpaceObject<T, NameSpace, 'getters'>[Map[k]]
+      AsFunction<GetNameSpaceObject<T, NameSpace, 'getters'>[Map[k]]>
     >;
   };
 
@@ -90,7 +91,7 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     u: Keys[]
   ): {
     [K in Keys]: () => ReturnType<
-      GetNameSpaceObject<T, NameSpace, 'getters'>[K]
+      AsFunction<GetNameSpaceObject<T, NameSpace, 'getters'>[K]>
     >;
   };
 
@@ -147,12 +148,12 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
   mapMutations<
     Map extends Record<string, K>,
     K extends OnlyString<Mutations<T>>
-  >(k: Map): { [k in keyof Map]: Mutation<Mutations<T>[Map[k]]> };
+  >(k: Map): { [k in keyof Map]: Mutation<AsFunction<Mutations<T>[Map[k]]>> };
 
   // keys
   mapMutations<Keys extends OnlyString<Mutations<T>>>(
     k: Keys[]
-  ): { [k in Keys]: Mutation<Mutations<T>[k]> };
+  ): { [k in Keys]: Mutation<AsFunction<Mutations<T>[k]>> };
 
   // namespace mapper
   mapMutations<
@@ -164,7 +165,7 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     m: Map
   ): {
     [k in keyof Map]: Mutation<
-      GetNameSpaceObject<T, NameSpace, 'mutations'>[Map[k]]
+      AsFunction<GetNameSpaceObject<T, NameSpace, 'mutations'>[Map[k]]>
     >;
   };
 
@@ -176,7 +177,9 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     k: NameSpace,
     u: Keys[]
   ): {
-    [K in Keys]: Mutation<GetNameSpaceObject<T, NameSpace, 'mutations'>[K]>;
+    [K in Keys]: Mutation<
+      AsFunction<GetNameSpaceObject<T, NameSpace, 'mutations'>[K]>
+    >;
   };
   mapMutations(k: any, u?: any) {
     return mapMutations(k, u);
