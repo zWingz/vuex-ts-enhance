@@ -25,10 +25,10 @@ export type PayloadAction<T> = T extends ActionHandler<any, any>
   
 export type Mutation<T extends (...args: any[]) => void> = GetPayloadAndChangeReturn<T, void>
 export type Module<T extends StoreOptions<any>> = T['modules'];
-export type Getters<T extends StoreOptions<any>> = T['getters'];
+export type Getters<T extends StoreOptions<any>> = NonNullable<T['getters']>;
 export type Actions<T extends StoreOptions<any>> = T['actions'];
 export type State<T extends StoreOptions<any>> = T['state'];
-export type Mutations<T extends StoreOptions<any>> = T['mutations'];
+export type Mutations<T extends StoreOptions<any>> = NonNullable<T['mutations']>;
 
 export type OnlyString<T> = keyof T & string;
 
@@ -51,5 +51,3 @@ export type GetNameSpaceObject<
     ? Module<T>[E][K]
     : never
   : never;
-
-export type AsFunction<T> = T extends (...args: any) => any ? T : (...args: any) => any;
