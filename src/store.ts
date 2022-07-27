@@ -77,7 +77,7 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     m: Map
   ): {
     [k in keyof Map]: () => ReturnType<
-      GetNameSpaceObject<T, NameSpace, 'getters'>[Map[k]]
+      NonNullable<GetNameSpaceObject<T, NameSpace, 'getters'>[Map[k]]>
     >;
   };
 
@@ -90,7 +90,7 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     u: Keys[]
   ): {
     [K in Keys]: () => ReturnType<
-      GetNameSpaceObject<T, NameSpace, 'getters'>[K]
+      NonNullable<GetNameSpaceObject<T, NameSpace, 'getters'>[K]>
     >;
   };
 
@@ -164,7 +164,7 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     m: Map
   ): {
     [k in keyof Map]: Mutation<
-      GetNameSpaceObject<T, NameSpace, 'mutations'>[Map[k]]
+      NonNullable<GetNameSpaceObject<T, NameSpace, 'mutations'>[Map[k]]>
     >;
   };
 
@@ -176,7 +176,9 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     k: NameSpace,
     u: Keys[]
   ): {
-    [K in Keys]: Mutation<GetNameSpaceObject<T, NameSpace, 'mutations'>[K]>;
+    [K in Keys]: Mutation<
+      NonNullable<GetNameSpaceObject<T, NameSpace, 'mutations'>[K]>
+    >;
   };
   mapMutations(k: any, u?: any) {
     return mapMutations(k, u);

@@ -9,6 +9,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapGetters, mapActions, mapState, mapMutations, dispatch } from './store'
+
 export default Vue.extend({
   computed: {
     ...mapState('user', ['username']),
@@ -25,13 +26,12 @@ export default Vue.extend({
     this.updateUsername('updateUsername')
     this.username
     this.updateUserMeta({ age: 21 });
-    dispatch('user', 'updateUsername')()
-    // this.()
+    dispatch('user', 'updateUsername')('New Name')
   },
   methods: {
     ...mapActions(['setName']),
     ...mapActions('user', ['updateUsername', 'updateUserMeta']),
-    ...mapMutations('user', ['setUsername', 'setUserMeta'])
+    ...mapMutations('user', ['setUsername', 'setUserMeta']),
   }
 });
 </script>
