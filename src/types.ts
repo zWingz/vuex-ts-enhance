@@ -51,3 +51,5 @@ export type GetNameSpaceObject<
     ? Module<T>[E][K]
     : never
   : never;
+
+export type AsFunction<T> = T extends (...args: any) => any ? T : (...args: any) => any;

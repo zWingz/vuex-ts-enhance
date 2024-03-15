@@ -18,6 +18,7 @@ import {
   OnlyString,
   GetNameSpaceKeys,
   GetNameSpaceObject,
+  AsFunction,
 } from './types';
 
 /**
@@ -77,7 +78,7 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     m: Map
   ): {
     [k in keyof Map]: () => ReturnType<
-      NonNullable<GetNameSpaceObject<T, NameSpace, 'getters'>[Map[k]]>
+      AsFunction<GetNameSpaceObject<T, NameSpace, 'getters'>[Map[k]]>
     >;
   };
 
@@ -90,7 +91,7 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     u: Keys[]
   ): {
     [K in Keys]: () => ReturnType<
-      NonNullable<GetNameSpaceObject<T, NameSpace, 'getters'>[K]>
+      AsFunction<GetNameSpaceObject<T, NameSpace, 'getters'>[K]>
     >;
   };
 
@@ -164,7 +165,7 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     m: Map
   ): {
     [k in keyof Map]: Mutation<
-      NonNullable<GetNameSpaceObject<T, NameSpace, 'mutations'>[Map[k]]>
+      AsFunction<GetNameSpaceObject<T, NameSpace, 'mutations'>[Map[k]]>
     >;
   };
 
@@ -177,7 +178,7 @@ export class EnhanceStore<S, T extends StoreOptions<S>> {
     u: Keys[]
   ): {
     [K in Keys]: Mutation<
-      NonNullable<GetNameSpaceObject<T, NameSpace, 'mutations'>[K]>
+      AsFunction<GetNameSpaceObject<T, NameSpace, 'mutations'>[K]>
     >;
   };
   mapMutations(k: any, u?: any) {
